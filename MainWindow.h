@@ -2,21 +2,53 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
+#include <QVector>
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    public slots:
+        void OpenGeometryFile();
+        void Process();
+        void setTotalHeightMin(double min);
+        void UpdateStats();
 
-private:
-    Ui::MainWindow *ui;
+    public:
+        explicit MainWindow(QWidget *parent = 0);
+
+        void UpdatePreview();
+
+        void RemoveHeader();
+        void RemoveFooter();
+        void AddOpcode_G1();
+        void GenerateLayers();
+
+        ~MainWindow();
+
+    private:
+        Ui::MainWindow *ui;
+        QString GeometryFilePath;
+        QFile *GeometryFile;
+
+        QVector<QString> Header;
+
+        QVector<QString> InitialData;
+        QVector<QString> Data;
+
+        QVector<QString> Footer;
+
+        bool HeaderRemoved;
+        bool FooterRemoved;
+        bool Opcode_G1_Added;
+
+
 };
 
 #endif // MAINWINDOW_H
