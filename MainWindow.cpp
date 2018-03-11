@@ -14,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     FooterRemoved = false;
     HeaderRemoved = false;
     Opcode_G1_Added = false;
+
+    Renderer = new GL_Renderer(60, this, "Part renderer");
+    ui->MDI_Area->addSubWindow(Renderer);
+    Renderer->showMaximized();
 }
 
 MainWindow::~MainWindow()

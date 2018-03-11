@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QVector>
 
+#include "GL_Renderer.h"
+
 namespace Ui
 {
     class MainWindow;
@@ -47,6 +49,8 @@ class MainWindow : public QMainWindow
         bool HeaderRemoved;
         bool FooterRemoved;
         bool Opcode_G1_Added;
+
+        GL_Renderer *Renderer;
 
 
 };
