@@ -4,13 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets opengl
 
 TARGET = CeramSlice
 TEMPLATE = app
-
+LIBS += -lopengl32
+LIBS += -lglu32
 
 SOURCES += main.cpp\
         MainWindow.cpp \

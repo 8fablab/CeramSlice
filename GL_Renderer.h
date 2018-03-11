@@ -5,9 +5,10 @@
 #include <QTimer>
 #include <QKeyEvent>
 
+#include <QOpenGLFunctions>
 #include <GL/glu.h>
 
-class GL_Renderer : public QOpenGLWidget
+class GL_Renderer : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:

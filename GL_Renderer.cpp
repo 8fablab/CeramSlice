@@ -20,6 +20,7 @@ GL_Renderer::GL_Renderer(int framesPerSecond, QWidget *parent, char *name) : QOp
 
 void GL_Renderer::initializeGL()
 {
+    initializeOpenGLFunctions();
     glShadeModel(GL_SMOOTH);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
