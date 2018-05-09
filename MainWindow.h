@@ -6,6 +6,8 @@
 #include <QVector>
 
 #include "GL_Renderer.h"
+#include "NC_ParserWorker.h"
+#include "PS_ParserWorker.h"
 
 namespace Ui
 {
@@ -21,16 +23,27 @@ class MainWindow : public QMainWindow
         void Process();
         void setTotalHeightMin(double min);
         void UpdateStats();
+        void SetNumberOfLayer(int Layers);
+        void UpdateProgress(int Progress);
+        void HandleParserResult(const QVector<QString> &pHeader, const QVector<QString> &pData, const QVector<QString> &pFooter);
+        void WorkerFinished();
 
     public:
         explicit MainWindow(QWidget *parent = 0);
 
         void UpdatePreview();
 
-        void RemoveHeader();
-        void RemoveFooter();
-        void AddOpcode_G1();
-        void GenerateLayers();
+        // *.ps file parser
+        void PS_RemoveHeader();
+        void PS_RemoveFooter();
+        void PS_AddOpcode_G1();
+        void PS_GenerateLayers();
+
+        // *.nc file parser
+        void NC_RemoveHeader();
+        void NC_RemoveFooter();
+        void NC_AddOpcode_G1();
+        void NC_GenerateLayers();
 
         ~MainWindow();
 
@@ -51,6 +64,10 @@ class MainWindow : public QMainWindow
         bool Opcode_G1_Added;
 
         GL_Renderer *Renderer;
+
+        bool WorkerInProgress;
+        NC_ParserWorker *NC_Worker;
+        PS_ParserWorker *PS_Worker;
 
 
 };

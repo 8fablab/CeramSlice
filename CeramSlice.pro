@@ -13,9 +13,13 @@ LIBS += -lglu32
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    GL_Renderer.cpp
+    GL_Renderer.cpp \
+    NC_ParserWorker.cpp \
+    PS_ParserWorker.cpp
 
 HEADERS  += MainWindow.h \
-    GL_Renderer.h
+    GL_Renderer.h \
+    NC_ParserWorker.h \
+    PS_ParserWorker.h
 
 FORMS    += MainWindow.ui

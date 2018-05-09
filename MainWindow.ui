@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1106</width>
-    <height>489</height>
+    <width>803</width>
+    <height>516</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,33 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="7" column="0" colspan="3">
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>Part Stats</string>
-      </property>
-      <layout class="QFormLayout" name="formLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Number of layers</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="NumOfLayer_lbl">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="3">
+    <item row="8" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>GCode Stats</string>
@@ -67,38 +41,44 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="2">
+    <item row="7" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Part Stats</string>
+      </property>
+      <layout class="QFormLayout" name="formLayout_2">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Number of layers</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="NumOfLayer_lbl">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="5" rowspan="20">
+     <widget class="QMdiArea" name="MDI_Area"/>
+    </item>
+    <item row="1" column="1">
      <widget class="QToolButton" name="SelectFileGeom_btn">
       <property name="text">
        <string>...</string>
       </property>
      </widget>
-    </item>
-    <item row="0" column="4" rowspan="11">
-     <widget class="QTextEdit" name="preview">
-      <property name="minimumSize">
-       <size>
-        <width>400</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0" colspan="3">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="label">
@@ -120,10 +100,59 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="5">
+    <item row="19" column="4">
      <widget class="QProgressBar" name="Progress">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="value">
        <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3" rowspan="20">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0" rowspan="11" colspan="3">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="4" rowspan="19">
+     <widget class="QPlainTextEdit" name="preview">
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="GeometryPath_ln"/>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QPushButton" name="Preview_btn">
+      <property name="text">
+       <string>Process</string>
       </property>
      </widget>
     </item>
@@ -137,25 +166,8 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QLineEdit" name="GeometryPath_ln"/>
-    </item>
-    <item row="6" column="0" colspan="3">
-     <widget class="QPushButton" name="Preview_btn">
-      <property name="text">
-       <string>Process</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3" rowspan="11">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="2">
-     <widget class="QLabel" name="label_2">
+    <item row="4" column="0">
+     <widget class="QLabel" name="lbl_TotalHeight">
       <property name="text">
        <string>Total extrusion height (mm)</string>
       </property>
@@ -168,9 +180,6 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="5" rowspan="12">
-     <widget class="QMdiArea" name="MDI_Area"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -178,7 +187,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1106</width>
+     <width>803</width>
      <height>18</height>
     </rect>
    </property>
@@ -277,6 +286,22 @@
     <hint type="destinationlabel">
      <x>491</x>
      <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>257</y>
     </hint>
    </hints>
   </connection>
