@@ -19,12 +19,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->lbl_TotalHeight->hide();
     ui->TotalHeight_num->hide();
 
-    //Renderer = new GL_Renderer(60, this, "Part renderer");
+    Renderer = new GL_Renderer(60, this, "Part renderer");
 
-    ui->MDI_Area->hide();
+    //ui->MDI_Area->hide();
     ui->Progress->hide();
-    //ui->MDI_Area->addSubWindow(Renderer);
-    //Renderer->showMaximized();
+    ui->MDI_Area->addSubWindow(Renderer);
+    Renderer->showMaximized();
+    showMaximized();
 }
 
 MainWindow::~MainWindow()

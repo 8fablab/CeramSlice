@@ -6,7 +6,13 @@
 #include <QKeyEvent>
 
 #include <QOpenGLFunctions>
+
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <GL/glu.h>
+
+#include "View/Shader.h"
 
 class GL_Renderer : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -23,6 +29,8 @@ public slots:
 
 private:
     QTimer *t_Timer;
+    glm::mat4 Projection;
+    glm::mat4 ModelView;
 
 };
 
