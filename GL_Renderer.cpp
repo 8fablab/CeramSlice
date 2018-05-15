@@ -20,6 +20,10 @@ GL_Renderer::GL_Renderer(int framesPerSecond, QWidget *parent, char *name) : QOp
 
     Projection = glm::perspective(70.0, (double) this->size().width() / this->size().height(), 1.0, 100.0);
     ModelView = glm::mat4(1.0);
+
+    Cam = new Camera(vec3(6, 6, 6), vec3(0, 0, 0), vec3(0, 1, 0), 0.5, 0.5);
+
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -27,7 +31,7 @@ void GL_Renderer::initializeGL()
 {
     initializeOpenGLFunctions();
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -41,8 +45,6 @@ void GL_Renderer::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
 
     Projection = glm::perspective(70.0, (double) width / height, 1.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
     ModelView = glm::mat4(1.0);
 }
 
@@ -88,7 +90,7 @@ void GL_Renderer::paintGL()
     shaderCouleur.charger();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ModelView = lookAt(vec3(-3, -3, -3.5), vec3(0, 0, 0), vec3(0, 1, 0));
+    Cam->lookAt(ModelView);
 
     // Activation du shader
     glUseProgram(shaderCouleur.getProgramID());
@@ -119,8 +121,25 @@ void GL_Renderer::paintGL()
     glUseProgram(0);
 }
 
+void GL_Renderer::mousePressEvent(QMouseEvent *mouseEvent)
+{
+    if(mouseEvent->type() == QEvent::MouseButtonPress)
+    {
+        MousePos.x = mouseEvent->pos().x();
+        MousePos.y = mouseEvent->pos().y();
+    }
+}
+
+void GL_Renderer::mouseMoveEvent(QMouseEvent *mouseEvent)
+{
+    Cam->orienter(mouseEvent->pos().x()-MousePos.x, mouseEvent->pos().y()-MousePos.y);
+    MousePos.x = mouseEvent->pos().x();
+    MousePos.y = mouseEvent->pos().y();
+}
+
 void GL_Renderer::keyPressEvent(QKeyEvent *keyEvent)
 {
+    Cam->deplacer(keyEvent);
     switch(keyEvent->key())
     {
         case Qt::Key_Escape:
@@ -131,4 +150,5 @@ void GL_Renderer::keyPressEvent(QKeyEvent *keyEvent)
 
 void GL_Renderer::timeOutSlot()
 {
+    paintGL();
 }

@@ -21,6 +21,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     Renderer = new GL_Renderer(60, this, "Part renderer");
 
+    int seconde = 1000; // 1 seconde = 1000 ms
+    int timerInterval = seconde / 60;
+    t_Timer = new QTimer(this);
+    connect(t_Timer, SIGNAL(timeout()), this, SLOT(timeOutSlot()));
+    t_Timer->start( timerInterval );
+
     //ui->MDI_Area->hide();
     ui->Progress->hide();
     ui->MDI_Area->addSubWindow(Renderer);
@@ -33,6 +39,11 @@ MainWindow::~MainWindow()
     delete ui;
     delete GeometryFile;
     delete Renderer;
+}
+
+void MainWindow::timeOutSlot()
+{
+    Renderer->update();
 }
 
 void MainWindow::UpdatePreview()

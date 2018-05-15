@@ -13,6 +13,7 @@
 #include <GL/glu.h>
 
 #include "View/Shader.h"
+#include "View/Camera.h"
 
 class GL_Renderer : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -22,6 +23,8 @@ public:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    void mousePressEvent(QMouseEvent *mouseEvent);
+    void mouseMoveEvent(QMouseEvent *mouseEvent);
     void keyPressEvent( QKeyEvent *keyEvent);
 
 public slots:
@@ -31,6 +34,10 @@ private:
     QTimer *t_Timer;
     glm::mat4 Projection;
     glm::mat4 ModelView;
+
+    glm::vec2 MousePos;
+
+    Camera *Cam;
 
 };
 

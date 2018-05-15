@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFile>
+#include <QTimer>
 #include <QVector>
 
 #include "GL_Renderer.h"
@@ -27,6 +28,7 @@ class MainWindow : public QMainWindow
         void UpdateProgress(int Progress);
         void HandleParserResult(const QVector<QString> &pHeader, const QVector<QString> &pData, const QVector<QString> &pFooter);
         void WorkerFinished();
+        virtual void timeOutSlot();
 
     public:
         explicit MainWindow(QWidget *parent = 0);
@@ -64,6 +66,7 @@ class MainWindow : public QMainWindow
         bool Opcode_G1_Added;
 
         GL_Renderer *Renderer;
+        QTimer *t_Timer;
 
         bool WorkerInProgress;
         NC_ParserWorker *NC_Worker;
