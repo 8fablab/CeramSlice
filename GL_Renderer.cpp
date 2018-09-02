@@ -18,14 +18,60 @@ GL_Renderer::GL_Renderer(int framesPerSecond, QWidget *parent, char *name) : QOp
         t_Timer->start( timerInterval );
     }
 
+    VBO_Id = 0;
+    ReloadVertices = false;
+    ModelSize = 0;
+
     Projection = glm::perspective(70.0, (double) this->size().width() / this->size().height(), 1.0, 100.0);
     ModelView = glm::mat4(1.0);
 
-    Cam = new Camera(vec3(6, 6, 6), vec3(0, 0, 0), vec3(0, 1, 0), 0.5, 0.5);
+    Cam = new Camera(vec3(10.0, 10.0, 10.0), vec3(6.0, 6.0, 0.0), vec3(0, 1, 0), 0.05, 0.05);
 
     setFocusPolicy(Qt::StrongFocus);
 }
 
+void GL_Renderer::UpdateModel(double ViewPercentage)
+{
+    /*glGenBuffers(1, &VBO_Id);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_Id);
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    */
+
+    Vertices = new float[Data.size()*3];
+    Colors = new float[Data.size()*3];
+    ModelSize = Data.size();
+
+    MeanPosition_X = 0;
+    MeanPosition_Y = 0;
+
+    int j = 0;
+    int MaxLayer = Data.size()*ViewPercentage;
+
+    for(int i = 0; i < MaxLayer; i++)
+    {
+        Vertices[j] = Data[i].x() /60.0;
+        Vertices[j+1] = Data[i].y()/60.0;
+        Vertices[j+2] = Data[i].z()/60.0;
+
+        Colors[j] = 1.0-((float)i/(float)Data.size());
+        Colors[j+1] = ((float)i/(float)Data.size());
+        Colors[j+2] = 1.0-((float)i/(float)Data.size());
+
+        MeanPosition_X += Data[i].x() / Data.size();
+        MeanPosition_Y += Data[i].y() / Data.size();
+
+        j += 3;
+    }
+
+    qDebug() << MeanPosition_X << MeanPosition_Y;
+
+    //Cam->orienter(MeanPosition_X, MeanPosition_Y);
+
+    ReloadVertices = true;
+}
 
 void GL_Renderer::initializeGL()
 {
@@ -44,47 +90,19 @@ void GL_Renderer::resizeGL(int width, int height)
         height = 1;
     glViewport(0, 0, width, height);
 
-    Projection = glm::perspective(70.0, (double) width / height, 1.0, 100.0);
+    Projection = glm::perspective(30.0, (double) width / height, 1.0, 100.0);
     ModelView = glm::mat4(1.0);
 }
 
 void GL_Renderer::paintGL()
 {
-    float vertices[] = {-1.0, -1.0, -1.0,   1.0, -1.0, -1.0,   1.0, 1.0, -1.0,     // Face 1
-                        -1.0, -1.0, -1.0,   -1.0, 1.0, -1.0,   1.0, 1.0, -1.0,     // Face 1
 
-                        1.0, -1.0, 1.0,   1.0, -1.0, -1.0,   1.0, 1.0, -1.0,       // Face 2
-                        1.0, -1.0, 1.0,   1.0, 1.0, 1.0,   1.0, 1.0, -1.0,         // Face 2
-
-                        -1.0, -1.0, 1.0,   1.0, -1.0, 1.0,   1.0, -1.0, -1.0,      // Face 3
-                        -1.0, -1.0, 1.0,   -1.0, -1.0, -1.0,   1.0, -1.0, -1.0,    // Face 3
-
-                        -1.0, -1.0, 1.0,   1.0, -1.0, 1.0,   1.0, 1.0, 1.0,        // Face 4
-                        -1.0, -1.0, 1.0,   -1.0, 1.0, 1.0,   1.0, 1.0, 1.0,        // Face 4
-
-                        -1.0, -1.0, -1.0,   -1.0, -1.0, 1.0,   -1.0, 1.0, 1.0,     // Face 5
-                        -1.0, -1.0, -1.0,   -1.0, 1.0, -1.0,   -1.0, 1.0, 1.0,     // Face 5
-
-                        -1.0, 1.0, 1.0,   1.0, 1.0, 1.0,   1.0, 1.0, -1.0,         // Face 6
-                        -1.0, 1.0, 1.0,   -1.0, 1.0, -1.0,   1.0, 1.0, -1.0};      // Face 6
-
-    float couleurs[] = {1.0, 0.0, 0.0,   1.0, 0.0, 0.0,   1.0, 0.0, 0.0,           // Face 1
-                        1.0, 0.0, 0.0,   1.0, 0.0, 0.0,   1.0, 0.0, 0.0,           // Face 1
-
-                        0.0, 1.0, 0.0,   0.0, 1.0, 0.0,   0.0, 1.0, 0.0,           // Face 2
-                        0.0, 1.0, 0.0,   0.0, 1.0, 0.0,   0.0, 1.0, 0.0,           // Face 2
-
-                        0.0, 0.0, 1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0,           // Face 3
-                        0.0, 0.0, 1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0,           // Face 3
-
-                        1.0, 0.0, 0.0,   1.0, 0.0, 0.0,   1.0, 0.0, 0.0,           // Face 4
-                        1.0, 0.0, 0.0,   1.0, 0.0, 0.0,   1.0, 0.0, 0.0,           // Face 4
-
-                        0.0, 1.0, 0.0,   0.0, 1.0, 0.0,   0.0, 1.0, 0.0,           // Face 5
-                        0.0, 1.0, 0.0,   0.0, 1.0, 0.0,   0.0, 1.0, 0.0,           // Face 5
-
-                        0.0, 0.0, 1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0,           // Face 6
-                        0.0, 0.0, 1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0};          // Face 6
+    float Grid[] = {-60.0, 0.0, 0.0,    60.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0,      0.0, 60.0, 0.0,
+                    0.0, 0.0, 0.0,      0.0, -60.0, 0.0};
+    float GridColor[] = {1.0, 0.0, 0.0,    1.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0,      0.0, 1.0, 0.0,
+                        0.0, 1.0, 0.0,      0.0, 1.0, 0.0};
 
     Shader shaderCouleur("View/Shaders/couleur3D.vert", "View/Shaders/couleur3D.frag");
     shaderCouleur.charger();
@@ -96,26 +114,39 @@ void GL_Renderer::paintGL()
     glUseProgram(shaderCouleur.getProgramID());
 
     // Envoi des vertices
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, Vertices);
     glEnableVertexAttribArray(0);
 
     // Envoi des couleurs
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, couleurs);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, Colors);
     glEnableVertexAttribArray(1);
-
-    //Transformations
-    //ModelView = translate(ModelView, vec3(-0.4, 0.0, 0.0));
-    //ModelView = rotate(ModelView, 45.0f, vec3(0.0, 0.0, 1.0));
 
     glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "modelview"), 1, GL_FALSE, value_ptr(ModelView));
     glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "projection"), 1, GL_FALSE, value_ptr(Projection));
 
     // Affichage du triangle
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_LINE_STRIP, 0, ModelSize);
 
-    // Désactivation des tableaux Vertex Attrib
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
+
+    // Envoi des vertices
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, Grid);
+    glEnableVertexAttribArray(2);
+
+    // Envoi des couleurs
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, GridColor);
+    glEnableVertexAttribArray(3);
+
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "modelview"), 1, GL_FALSE, value_ptr(ModelView));
+    glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "projection"), 1, GL_FALSE, value_ptr(Projection));
+
+    glDrawArrays(GL_LINE, 0, 6);
+
+    // Désactivation des tableaux Vertex Attrib
+    glDisableVertexAttribArray(3);
+    glDisableVertexAttribArray(2);
 
     // Désactivation du shader
     glUseProgram(0);

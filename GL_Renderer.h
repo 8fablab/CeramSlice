@@ -4,6 +4,8 @@
 #include <QOpenGLWidget>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QVector3D>
+#include <QDebug>
 
 #include <QOpenGLFunctions>
 
@@ -27,6 +29,10 @@ public:
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void keyPressEvent( QKeyEvent *keyEvent);
 
+    void UpdateModel(double ViewPercentage);
+    QVector<QVector3D> Data;
+
+
 public slots:
     virtual void timeOutSlot();
 
@@ -34,8 +40,16 @@ private:
     QTimer *t_Timer;
     glm::mat4 Projection;
     glm::mat4 ModelView;
-
     glm::vec2 MousePos;
+
+    GLuint VBO_Id;
+    float *Vertices;
+    float *Colors;
+    int ModelSize;
+
+    float MeanPosition_X;
+    float MeanPosition_Y;
+    bool ReloadVertices;
 
     Camera *Cam;
 

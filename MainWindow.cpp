@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->MDI_Area->addSubWindow(Renderer);
     Renderer->showMaximized();
     showMaximized();
+    FileParsed = false;
 }
 
 MainWindow::~MainWindow()
@@ -123,6 +124,56 @@ void MainWindow::UpdateStats()
     ui->NumOfLayer_lbl->setText(QString::number(NumberOfLayers));
 }
 
+void MainWindow::UpdateLayerView()
+{
+    if(FileParsed)
+        Update3DView();
+
+    ui->lbl_LayerViewer->setText(QString::number((double)ui->slide_LayerViewer->value()) + QString("%"));
+}
+
+void MainWindow::Update3DView()
+{
+    Renderer->Data.clear();
+    //Renderer->Data.resize(Data.size());
+
+    for(int i = 0; i < Data.size(); i++)
+    {
+        float x, y, z;
+        QRegExp X_Data("X-?\\d+\\.\\d+");
+        QRegExp Y_Data("Y-?\\d+\\.\\d+");
+        QRegExp Z_Data("Z-?\\d+\\.\\d+");
+
+        if(Data[i].contains(X_Data))
+            x = X_Data.capturedTexts()[0].remove(0, 1).toFloat();
+        else if(i > 0)
+            x = Renderer->Data[i-1].x();
+        else
+            x = 0.0;
+
+        if(Data[i].contains(Y_Data))
+            y = Y_Data.capturedTexts()[0].remove(0, 1).toFloat();
+        else if(i > 0)
+            y = Renderer->Data[i-1].y();
+        else
+            y = 0.0;
+
+        if(Data[i].contains(Z_Data))
+            z = Z_Data.capturedTexts()[0].remove(0, 1).toFloat();
+        else if(i > 0)
+            z = Renderer->Data[i-1].z();
+        else
+            z = 0.0;
+
+        QVector3D Vertex(x, y, z);
+        Renderer->Data.push_back(Vertex);
+    }
+
+
+    qDebug() << "Raw data processed";
+    Renderer->UpdateModel((double)ui->slide_LayerViewer->value()/100.0);
+}
+
 void MainWindow::SetNumberOfLayer(int Layers)
 {
     ui->NumOfLayer_lbl->setText(QString::number(Layers));
@@ -175,6 +226,7 @@ void MainWindow::OpenGeometryFile()
     InitialData.clear();
     Data.clear();
     Footer.clear();
+    FileParsed = false;
 
     while (!in.atEnd())
     {
@@ -240,5 +292,8 @@ void MainWindow::HandleParserResult(const QVector<QString> &pHeader, const QVect
     Data = pData;
     Footer = pFooter;
 
+    FileParsed = true;
+
     UpdatePreview();
+    Update3DView();
 }

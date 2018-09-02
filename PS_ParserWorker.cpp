@@ -31,7 +31,7 @@ void PS_ParserWorker::run()
 
 void PS_ParserWorker::PS_RemoveHeader()
 {
-    QRegExp StartOfInitialData("^\\d+\\.\\d+ \\d+\\.\\d+");
+    QRegExp StartOfInitialData("^-?\\d+\\.\\d+ -?\\d+\\.\\d+");
 
     emit progress(0);
 
@@ -70,7 +70,7 @@ void PS_ParserWorker::PS_RemoveHeader()
 
 void PS_ParserWorker::PS_RemoveFooter()
 {
-    QRegExp StartOfInitialData("^\\d+\\.\\d+ \\d+\\.\\d+");
+    QRegExp StartOfInitialData("^-?\\d+\\.\\d+ -?\\d+\\.\\d+");
 
 
     emit progress(0);
@@ -96,9 +96,10 @@ void PS_ParserWorker::PS_RemoveFooter()
 
 void PS_ParserWorker::PS_ProcessData()
 {
-    QRegExp Data("^\\d+\\.\\d+ \\d+\\.\\d+");
+    QRegExp Data("^-?\\d+\\.\\d+ -?\\d+\\.\\d+");
     QRegExp FourthDigit("\\d ");
     QRegExp PS_DataOpcode(" [lm]$");
+    QRegExp YData_Start(" -?\\d+\\.\\d+$");
 
     emit progress(0);
     LayerNumber = GetBlockNumber();
@@ -112,7 +113,7 @@ void PS_ParserWorker::PS_ProcessData()
             InitialData[i].replace(FourthDigit, QString(" "));
             InitialData[i].remove(PS_DataOpcode);
             InitialData[i].insert(0, 'X');
-            InitialData[i].insert(9, 'Y');
+            InitialData[i].insert(InitialData[i].indexOf(YData_Start)+1, 'Y');
         }
     }
 
@@ -132,7 +133,7 @@ int PS_ParserWorker::GetBlockNumber()
         return LayerNumber;
 
     QRegExp NewPage("^n$");
-    QRegExp PS_Data("(^\\d+\\.\\d+ \\d+\\.\\d+)|(^X\\d+\\.\\d+ Y\\d+\\.\\d+)");
+    QRegExp PS_Data("(^-?\\d+\\.\\d+ -?\\d+\\.\\d+)|(^X-?\\d+\\.\\d+ Y-?\\d+\\.\\d+)");
 
     for(int i = 0; i < InitialData.size(); i++)
     {
@@ -154,7 +155,7 @@ QVector<QString> PS_ParserWorker::GetDataBlock(int Block)
     int CurrentBlock = 1;
     QVector<QString> BlockData;
     QRegExp NewPage("^n$");
-    QRegExp PS_Data("(^\\d+\\.\\d+ \\d+\\.\\d+)|(^X\\d+\\.\\d+ Y\\d+\\.\\d+)");
+    QRegExp PS_Data("(^-?\\d+\\.\\d+ -?\\d+\\.\\d+)|(^X-?\\d+\\.\\d+ Y-?\\d+\\.\\d+)");
 
     for(int i = 0; i < InitialData.size(); i++)
     {

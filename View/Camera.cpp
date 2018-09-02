@@ -109,7 +109,7 @@ void Camera::deplacer(QKeyEvent *keyEvent)
 
     // Avancée de la caméra
 
-    if(keyEvent->key() == Qt::Key_Up)
+    if(keyEvent->key() == Qt::Key_Z)
     {
         m_position = m_position + m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
@@ -118,7 +118,7 @@ void Camera::deplacer(QKeyEvent *keyEvent)
 
     // Recul de la caméra
 
-    if(keyEvent->key() == Qt::Key_Down)
+    if(keyEvent->key() == Qt::Key_S)
     {
         m_position = m_position - m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
@@ -127,7 +127,7 @@ void Camera::deplacer(QKeyEvent *keyEvent)
 
     // Déplacement vers la gauche
 
-    if(keyEvent->key() == Qt::Key_Left)
+    if(keyEvent->key() == Qt::Key_Q)
     {
         m_position = m_position + m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;
@@ -136,7 +136,7 @@ void Camera::deplacer(QKeyEvent *keyEvent)
 
     // Déplacement vers la droite
 
-    if(keyEvent->key() == Qt::Key_Right)
+    if(keyEvent->key() == Qt::Key_D)
     {
         m_position = m_position - m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;

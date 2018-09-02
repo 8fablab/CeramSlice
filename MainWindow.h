@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QTimer>
 #include <QVector>
+#include <QDebug>
+#include <QVector3D>
 
 #include "GL_Renderer.h"
 #include "NC_ParserWorker.h"
@@ -28,12 +30,14 @@ class MainWindow : public QMainWindow
         void UpdateProgress(int Progress);
         void HandleParserResult(const QVector<QString> &pHeader, const QVector<QString> &pData, const QVector<QString> &pFooter);
         void WorkerFinished();
+        void UpdateLayerView();
         virtual void timeOutSlot();
 
     public:
         explicit MainWindow(QWidget *parent = 0);
 
         void UpdatePreview();
+        void Update3DView();
 
         // *.ps file parser
         void PS_RemoveHeader();
@@ -64,6 +68,7 @@ class MainWindow : public QMainWindow
         bool HeaderRemoved;
         bool FooterRemoved;
         bool Opcode_G1_Added;
+        bool FileParsed;
 
         GL_Renderer *Renderer;
         QTimer *t_Timer;
